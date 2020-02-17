@@ -18,10 +18,20 @@ class App {
           let _this = this
           this.webMachine = new WebMachine(msg.arg, getURLParameter('layout'))
           this.webMachine.cy.on('tap', 'edge', function (evt) {
+            //console.log('tap edge', evt);
             if (_this.webMachine.cy.autolock()) {
               _this.ws.send(JSON.stringify({
                 'method': 'trigger',
                 'arg': evt.target.data('trigger')
+              }))
+            }
+          })
+          this.webMachine.cy.on('tap', 'node', function (evt) {
+            //console.log('tap node', evt);
+            if (_this.webMachine.cy.autolock()) {
+              _this.ws.send(JSON.stringify({
+                'method': 'to_',
+                'arg': evt.target.id()
               }))
             }
           })

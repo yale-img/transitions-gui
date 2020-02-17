@@ -30,16 +30,22 @@ class WebMachine(MarkupMachine):
         super(WebMachine, self).__init__(*args, **kwargs)
 
     def process_message(self, message):
+        print("process_message '{}'".format(message))
         if message['method'] == 'trigger':
             for model in self.models:
                 model.trigger(message['arg'])
+        if message['method'] == 'to_':
+            for model in self.models:
+                model.trigger('to_{}'.format(message['arg']))
 
     def start_server(self):
         import tornado.ioloop
+        import asyncio
+        from tornado.platform.asyncio import AnyThreadEventLoopPolicy
+        asyncio.set_event_loop_policy(AnyThreadEventLoopPolicy())
         try:
             self._iloop = tornado.ioloop.IOLoop.current()
         except RuntimeError:
-            import asyncio
             asyncio.set_event_loop(asyncio.new_event_loop())
             self._iloop = tornado.ioloop.IOLoop.current()
         except ImportError:

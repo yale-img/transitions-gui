@@ -56,7 +56,11 @@ export default class WebMachine {
   }
 
   selectState (state) {
-    let node = this.cy.getElementById(state)
+    let cur = document.getElementsByClassName('current');
+    if (cur && cur.classList) {
+      cur.classList.remove('current');
+    }
+    let node = this.cy.getElementById(state);
     node.addClass('current')
   }
 
